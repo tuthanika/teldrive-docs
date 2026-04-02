@@ -945,6 +945,7 @@ paths:
         - $ref: '#/components/parameters/UploadQuery.path'
         - $ref: '#/components/parameters/UploadQuery.encrypted'
         - $ref: '#/components/parameters/UploadQuery.uploadAsMedia'
+        - $ref: '#/components/parameters/UploadQuery.topicId'
         - $ref: '#/components/parameters/UploadQuery.hashing'
       responses:
         '200':
@@ -1171,6 +1172,36 @@ paths:
       responses:
         '204':
           description: There is no content to send for this request, but the headers may be useful.
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+        - ApiKeyAuth: []
+  /users/channels/{id}/topics:
+    get:
+      operationId: Users_listTopics
+      summary: List channel topics
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
         default:
           description: An unexpected error response.
           content:
@@ -1574,6 +1605,14 @@ components:
         type: boolean
         default: false
       explode: false
+    UploadQuery.topicId:
+      name: topicId
+      in: query
+      required: false
+      description: Optional topic/thread identifier for upload
+      schema:
+        type: integer
+      explode: false
     UploadQuery.fileName:
       name: fileName
       in: query
@@ -1693,6 +1732,9 @@ components:
           type: integer
           format: int64
           description: Unique numeric identifier of the channel
+        topicId:
+          type: integer
+          description: Default Topic ID for the channel
       description: Telegram channel information
       example:
         channelName: Channel Name
@@ -1707,6 +1749,9 @@ components:
           type: integer
           format: int64
           description: Unique numeric identifier of the channel
+        topicId:
+          type: integer
+          description: Default Topic ID for the channel
       description: Telegram channel information
       example:
         channelName: Channel Name
@@ -1797,6 +1842,10 @@ components:
           format: int64
           description: Channel ID
           example: 123456789
+        topicId:
+          type: integer
+          description: Topic/Thread ID
+          example: 123
         path:
           type: string
           description: File or Folder path
@@ -2005,6 +2054,10 @@ components:
           format: int64
           description: Channel ID
           example: 123456
+        topicId:
+          type: integer
+          description: Topic/Thread ID
+          example: 123
         uploadId:
           type: string
           description: Upload ID for hash calculation
@@ -2244,6 +2297,9 @@ components:
           type: integer
           format: int64
           description: Channel identifier associated with the user
+        topicId:
+          type: integer
+          description: Default Topic ID for the channel
         bots:
           type: array
           items:
@@ -2255,6 +2311,21 @@ components:
         bots:
           - bot1
           - bot2
+    Topic:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          description: Topic ID
+          example: 1
+        name:
+          type: string
+          description: Topic name
+          example: General
+      description: Telegram channel topic information
     UserSession:
       type: object
       required:
