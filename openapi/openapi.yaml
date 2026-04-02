@@ -942,7 +942,9 @@ paths:
         - $ref: '#/components/parameters/UploadQuery.fileName'
         - $ref: '#/components/parameters/UploadQuery.partNo'
         - $ref: '#/components/parameters/UploadQuery.channelId'
+        - $ref: '#/components/parameters/UploadQuery.path'
         - $ref: '#/components/parameters/UploadQuery.encrypted'
+        - $ref: '#/components/parameters/UploadQuery.uploadAsMedia'
         - $ref: '#/components/parameters/UploadQuery.hashing'
       responses:
         '200':
@@ -1546,11 +1548,28 @@ components:
         type: integer
         format: int64
       explode: false
+    UploadQuery.path:
+      name: path
+      in: query
+      required: false
+      description: Upload path
+      schema:
+        type: string
+      explode: false
     UploadQuery.encrypted:
       name: encrypted
       in: query
       required: false
       description: Whether the upload content is encrypted
+      schema:
+        type: boolean
+        default: false
+      explode: false
+    UploadQuery.uploadAsMedia:
+      name: uploadAsMedia
+      in: query
+      required: false
+      description: Whether the file should be uploaded as playable media
       schema:
         type: boolean
         default: false

@@ -608,6 +608,10 @@ model UploadQuery {
   @query
   encrypted?: boolean = false;
 
+  @doc("Whether the file should be uploaded as playable media")
+  @query
+  uploadAsMedia?: boolean = false;
+
   @doc("Enable BLAKE3 hashing for integrity checking")
   @query
   hashing?: boolean = true;
